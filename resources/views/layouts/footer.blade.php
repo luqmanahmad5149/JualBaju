@@ -13,7 +13,7 @@
                 </li>
                 <li class="pb-1">
                     <a href="/">
-                        Contact
+                        Customer Care
                     </a>
                 </li>
                 <li class="pb-1">
@@ -30,13 +30,13 @@
         </div>
         <div>
             <h3 class="text-l sm:font-bold text-gray-100">
-                Find Us
+                More About Us
             </h3>
     
             <ul class="py-4 sm:text-s pt-4 text-gray-400">
                 <li class="pb-1">
                     <a href="/">
-                        What we do
+                        What we do?
                     </a>
                 </li>
                 <li class="pb-1">
@@ -51,7 +51,7 @@
                 </li>
                 <li class="pb-1">
                     <a href="/">
-                        Rate our services
+                        Rate our Services
                     </a>
                 </li>
             </ul>
