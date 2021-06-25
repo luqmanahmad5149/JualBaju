@@ -7,3 +7,10 @@
 .text-area {
     resize: none;
 }
+
+#websiteImage {
+    max-width: 800px;
+    height: 560px;
+    overflow: hidden;
+    margin: 0;
+}

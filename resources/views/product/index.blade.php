@@ -1,6 +1,45 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="splide m-6">
+        <div class="splide__track">
+            <ul class="splide__list">
+                <li class="splide__slide">
+                    <div class="grid md:grid-cols-2 grid-cols-1 bg-white place-items-center">
+                        <div id="websiteDescription" class="flex flex-col justify-center align-middle p-3 md:ml-20 ml-1">
+                            <h1 class="text-3xl">Special Promotion</h1>
+                            <p class="mt-4 text-sm">Each promotion only validate until the stated date on the promotion banner. Start redeeming it now !</p>
+                        </div>
+                        <div id="websiteImage" class="p-3 flex justify-center items-center">
+                            <img src="img/father-promo.jpg" class="w-3/4 border-2 rounded-xl" />
+                        </div>
+                    </div>
+                </li>
+                <li class="splide__slide">
+                    <div class="grid md:grid-cols-2 grid-cols-1 bg-white place-items-center">
+                        <div id="websiteDescription" class="flex flex-col justify-center align-middle p-3 md:ml-20 ml-1">
+                            <h1 class="text-3xl">Special Promotion</h1>
+                            <p class="mt-4 text-sm">Each promotion only validate until the stated date on the promotion banner. Start redeeming it now !</p>
+                        </div>
+                        <div id="websiteImage" class="p-3 flex justify-center items-center">
+                            <img src="img/woman-promo.jpg" class="w-3/4 border-2 rounded-xl" />
+                        </div>
+                    </div>
+                </li>
+                <li class="splide__slide">
+                    <div class="grid md:grid-cols-2 grid-cols-1 bg-white place-items-center">
+                        <div id="websiteDescription" class="flex flex-col justify-center align-middle p-3 md:ml-20 ml-1">
+                            <h1 class="text-3xl">Special Promotion</h1>
+                            <p class="mt-4 text-sm">Each promotion only validate until the stated date on the promotion banner. Start redeeming it now !</p>
+                        </div>
+                        <div id="websiteImage" class="p-3 flex justify-center items-center">
+                            <img src="img/christmas-promo.jpg" class="w-3/4 border-2 rounded-xl" />
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
     @if (session()->has('message'))
     <div class="w-full mt-10 p-1 text-center">
         <p class="mb-4 text-gray-50 bg-green-500 rounded-md py-3">
@@ -8,7 +47,7 @@
         </p>
     </div>
     @endif
-    <div class="m-auto border-b border-gray-200 mt-12 flex justify-center items-center pb-4 ">
+    <div class="m-auto mt-12 mb-4 flex justify-center items-center">
         <h4 class="text-3xl font-bold ">Trending Items</h4>
         @if (Auth::check())
             <a 
@@ -18,7 +57,7 @@
             </a>
         @endif
     </div>
-    <div class="mt-8">
+    <div>
         <div class="p-10 grid grid-cols-4 gap-10">
             @foreach ($products as $product )
                 <div class="card shadow-md hover:shadow-lg">

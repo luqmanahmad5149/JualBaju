@@ -24,11 +24,12 @@
     
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-skyblue.min.css">
     
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none font-sans">
     <div id="app">
-        <header class="bg-gray-800 py-6 sticky top-0 z-50"">
+        <header class="bg-gray-800 py-4 sticky top-0 z-50"">
             <div class="container mx-auto flex justify-between items-center px-6">
                 <div>
                     <a href="{{ url('/product') }}" class="text-3xl font-semibold text-gray-100 no-underline">
@@ -67,5 +68,13 @@
             @include('layouts.footer')
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    <script>
+        new Splide( '.splide', {
+            type: 'loop',
+            rewind : true,
+            autoplay: true,
+        } ).mount();
+    </script>
 </body>
 </html>
