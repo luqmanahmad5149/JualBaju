@@ -199,7 +199,7 @@ class ProductsController extends Controller
 
         $user = DB::table('users')->where('id', $userId)->first();
 
-        return view('product.orderNow', compact('total', 'user'));
+        return view('product.ordernow', compact('total', 'user'));
     }
 
     public function orderPlace(Request $request)
