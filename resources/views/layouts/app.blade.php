@@ -25,6 +25,7 @@
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-skyblue.min.css">
+    <link rel="stylesheet" href=" {{mix ('css/style.css')}}">
     
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none font-sans">

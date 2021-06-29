@@ -38,7 +38,7 @@
                     </div>
                     <div class="md:w-2/4 pl-20">
                         <p class="text-md text-gray-600">
-                            SambalSedapShop
+                            BundleBaruShop
                         </p>
                     </div>
                 </div>
