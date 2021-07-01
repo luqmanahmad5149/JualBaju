@@ -43,9 +43,9 @@
                     </div>
                 @endforeach  
             @else
-                    <div class="w-full h-60 flex justify-center">
-                        <h3 class="text-gray-700 text-lg">No Item in Cart</h3>
-                    </div>
+                <div class="w-full h-60 flex justify-center">
+                    <h3 class="text-gray-700 text-lg">No Item in Cart</h3>
+                </div>
             @endif
         </div>
     </div>

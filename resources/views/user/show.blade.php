@@ -16,7 +16,7 @@
                         <div>
                 <div class="flex flex-col items-center justify-center pb-8 border-r">
                     <div class="w-2/4 pt-5 flex justify-center">
-                        <img src="https://img.freepik.com/free-photo/portrait-young-bearded-hipster-man-looking-camera-taking-selfie-against-yellow_58466-11455.jpg?size=626&ext=jpg" alt="" class="rounded-full h-32 w-32 object-cover shadow-xl"> 
+                        <img src="/img/{{ $user->image_Path ?? 'images.png' }}" alt="" class="rounded-full h-32 w-32 object-cover shadow-xl"> 
                     </div>
                     <div class="w-2/4 pt-9 flex justify-center">
                         @if (isset(Auth::user()->id) && Auth::user()->id == $user->id)
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <div class="col-span-2 pl-13">
-                <div class="md:flex mb-7">
+                {{-- <div class="md:flex mb-7">
                     <div class="md:w-1/4">
                         <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4">
                             Username:
@@ -41,7 +41,7 @@
                             BundleBaruShop
                         </p>
                     </div>
-                </div>
+                </div> --}}
                 <div class="md:flex mb-7">
                     <div class="md:w-1/4">
                         <label class="block text-gray-600 font-bold md:text-left mb-3 md:mb-0 pr-4">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="md:w-2/4 pl-20">
                         <p class="text-md text-gray-600">
-                            017-5285384
+                            +60{{ $user->contact ?? '' }}
                         </p>
                     </div>
                 </div>
@@ -86,7 +86,7 @@
                     </div>
                     <div class="md:w-2/4 pl-20">
                         <p class="text-md text-gray-600">
-                            Male
+                            {{ $user->gender ?? '' }}
                         </p>
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="md:w-2/4 pl-20">
                         <p class="text-md text-gray-600">
-                            26 December 1995
+                            {{ $user->dob ?? '' }}
                         </p>
                     </div>
                 </div>
@@ -110,7 +110,7 @@
                     </div>
                     <div class="md:w-2/4 pl-20">
                         <p class="text-md text-gray-600">
-                            {{ $user->address }}
+                            {{ $user->address ?? ''}}
                         </p>
                     </div>
                 </div>

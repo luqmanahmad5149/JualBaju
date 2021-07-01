@@ -57,7 +57,6 @@ class ProductsController extends Controller
         ]);
 
         $newImageName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
-
         $request->image->move(public_path('images'), $newImageName);
 
         Product::create([

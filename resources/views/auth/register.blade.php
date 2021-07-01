@@ -13,7 +13,7 @@
                 <form class="w-full px-6 space-y-6 sm:px-10 sm:space-y-8" method="POST"
                     action="{{ route('register') }}">
                     @csrf
-
+                    <input type="text" name="level" value="user" hidden>
                     <div class="flex flex-wrap">
                         <label for="name" class="block text-gray-700 text-sm font-bold mb-2 sm:mb-4">
                             {{ __('Name') }}:
