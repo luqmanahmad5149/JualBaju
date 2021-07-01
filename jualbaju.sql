@@ -3,14 +3,14 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2021 at 07:40 AM
+-- Generation Time: Jul 01, 2021 at 05:36 PM
 -- Server version: 10.4.17-MariaDB
 -- PHP Version: 8.0.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
+-- d
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,9 +40,7 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `product_id`, `user_id`, `created_at`, `updated_at`) VALUES
-(23, 9, 2, '2021-06-22 06:49:52', '2021-06-22 06:49:52'),
-(24, 13, 2, '2021-06-22 06:49:55', '2021-06-22 06:49:55'),
-(25, 10, 2, '2021-06-22 06:50:00', '2021-06-22 06:50:00');
+(40, 17, 4, '2021-07-01 07:28:43', '2021-07-01 07:28:43');
 
 -- --------------------------------------------------------
 
@@ -84,7 +82,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (5, '2021_06_15_151920_add_slug_to_products_table', 2),
 (7, '2021_06_18_121814_create_carts_table', 3),
 (9, '2021_06_20_045826_create_orders_table', 4),
-(10, '2021_06_20_085102_add_address_to_users_table', 5);
+(10, '2021_06_20_085102_add_address_to_users_table', 5),
+(12, '2021_06_30_023311_add_more_to_users_table', 6);
 
 -- --------------------------------------------------------
 
@@ -111,15 +110,13 @@ CREATE TABLE `orders` (
 INSERT INTO `orders` (`id`, `product_id`, `user_id`, `address`, `payment_method`, `payment_status`, `status`, `created_at`, `updated_at`) VALUES
 (1, 18, 2, '441 jalan damai', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-19 21:43:46', '2021-06-19 21:43:46'),
 (2, 17, 2, '441 jalan damai', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-19 21:43:46', '2021-06-19 21:43:46'),
-(3, 16, 2, '441 jalan damai', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-19 21:43:46', '2021-06-19 21:43:46'),
-(4, 18, 3, 'taman damai 09400', 'banking app', 'Succesful', 'On Delivery', '2021-06-19 21:45:07', '2021-06-19 21:45:07'),
-(5, 17, 3, 'taman damai 09400', 'banking app', 'Succesful', 'On Delivery', '2021-06-19 21:45:07', '2021-06-19 21:45:07'),
-(6, 15, 3, 'taman damai 09400', 'banking app', 'Succesful', 'On Delivery', '2021-06-19 21:45:07', '2021-06-19 21:45:07'),
 (7, 13, 2, 'Jalan damai', 'online banking', 'Succesful', 'On Delivery', '2021-06-19 22:26:35', '2021-06-19 22:26:35'),
 (8, 9, 2, 'Jalan damai', 'online banking', 'Succesful', 'On Delivery', '2021-06-19 22:26:35', '2021-06-19 22:26:35'),
 (9, 15, 2, 'Taman bahtera, 35900 Tanjong Malim, Perak', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-21 23:21:19', '2021-06-21 23:21:19'),
 (10, 15, 2, 'Taman bahtera, 35900 Tanjong Malim, Perak', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-21 23:21:19', '2021-06-21 23:21:19'),
-(11, 15, 2, 'Taman bahtera, 35900 Tanjong Malim, Perak', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-21 23:23:16', '2021-06-21 23:23:16');
+(11, 15, 2, 'Taman bahtera, 35900 Tanjong Malim, Perak', 'debit/credit card', 'Succesful', 'On Delivery', '2021-06-21 23:23:16', '2021-06-21 23:23:16'),
+(12, 18, 4, 'Taman Bahtera, Lorong Bahtera 2/2, 35900 Tanjong Malin, Perak', 'online banking', 'Succesful', 'On Delivery', '2021-07-01 07:28:35', '2021-07-01 07:28:35'),
+(13, 12, 4, 'Taman Bahtera, Lorong Bahtera 2/2, 35900 Tanjong Malin, Perak', 'online banking', 'Succesful', 'On Delivery', '2021-07-01 07:28:35', '2021-07-01 07:28:35');
 
 -- --------------------------------------------------------
 
@@ -159,15 +156,15 @@ CREATE TABLE `products` (
 INSERT INTO `products` (`id`, `name`, `price`, `category`, `description`, `image_path`, `created_at`, `updated_at`, `user_id`, `slug`) VALUES
 (7, 'Grey cotton shirt', '24.80', 't-shirt', 'Ordinary shirt with nothing special about it', '60cb352433188-Grey shirt.jpg', '2021-06-17 03:42:28', '2021-06-17 04:59:14', 2, 'grey-cotton-shirt'),
 (9, 'Navy Blue Polo shirt', '127.00', 't-shirt', 'Make hot weather hotter', '60cb369d8fa80-Navy Blue Polo shirt.jpg', '2021-06-17 03:48:45', '2021-06-17 03:48:45', 2, 'navy-blue-polo-shirt'),
-(10, 'Blue cool swim suit', '253.40', 'swimming suit', 'Female swimsuit which is made from pure elastic hybrid that suit any ages', '60cb36ff2a6c9-Blue cool swim suit.jpg', '2021-06-17 03:50:23', '2021-06-17 03:50:23', 2, 'blue-cool-swim-suit'),
 (11, 'Trekking Pant v2', '60.89', 'trouser', 'Durable trekking pant', '60cb4a46c25b6-Trekking Pant v2.jpg', '2021-06-17 05:12:38', '2021-06-17 05:12:38', 2, 'trekking-pant-v2'),
 (12, 'Long sleeve shirt', '148.50', 't-shirt', 'Suitable to wear for class', '60cb4a85481d1-Long sleeve shirt.jpg', '2021-06-17 05:13:41', '2021-06-17 05:13:41', 2, 'long-sleeve-shirt'),
 (13, 'Uniqlo Mask', '30.00', 'airism', 'Mask that protect from germ', '60cb4b026529f-Uniqlo Mask.jpg', '2021-06-17 05:15:46', '2021-06-17 05:15:46', 2, 'uniqlo-mask'),
-(14, 'Adidas Swim Suit', '507.20', 'swimming suit', 'Sport swimsuit for women team', '60cb4d38b3258-Adidas Swim Suit.jpg', '2021-06-17 05:25:12', '2021-06-17 05:25:12', 2, 'adidas-swim-suit'),
 (15, 'Barcode Shirt', '49.99', 'airism', 'Try to scan it *wink*', '60cb4d64e7127-Barcode Shirt.jpg', '2021-06-17 05:25:56', '2021-06-17 05:25:56', 2, 'barcode-shirt'),
-(16, 'Black cool', '180.60', 'swimming suit', 'Swimsuit for your mom', '60cb4d8dd79f9-Black cool.jpg', '2021-06-17 05:26:37', '2021-06-17 05:26:37', 2, 'black-cool'),
 (17, 'Leaves coloured shirt', '60.89', 'airism', 'Nothing beat simple green', '60cb4db7dafd6-Leaves coloured shirt.jpg', '2021-06-17 05:27:19', '2021-06-17 05:27:19', 2, 'leaves-coloured-shirt'),
-(18, 'Original Lee Cooper', '380.20', 'jeans', 'Good old pant', '60cb5949a6ba3-Original Lee Cooper.jpg', '2021-06-17 06:16:41', '2021-06-17 06:16:41', 2, 'original-lee-cooper');
+(18, 'Original Lee Cooper', '380.20', 'jeans', 'Good old pant', '60cb5949a6ba3-Original Lee Cooper.jpg', '2021-06-17 06:16:41', '2021-06-17 06:16:41', 2, 'original-lee-cooper'),
+(20, 'Dark Swimsuit', '127.00', 'swimming suit', 'Athletic swimsuit for the finest', '60db3459ac812-Dark Swimsuit.jpg', '2021-06-29 06:55:21', '2021-06-29 06:55:21', 3, 'dark-swimsuit'),
+(21, 'Blue swimwear', '253.40', 'swimming suit', 'Good for the summer vacation', '60db34863fd63-Blue swimwear.jpg', '2021-06-29 06:56:06', '2021-06-29 06:56:06', 3, 'blue-swimwear'),
+(22, 'Navy Blue Swim Suit', '127.00', 'swimming suit', 'For athletic experiences like nowhere else', '60db34b483014-Navy Blue Swim Suit.jpg', '2021-06-29 06:56:52', '2021-06-29 06:56:52', 3, 'navy-blue-swim-suit');
 
 -- --------------------------------------------------------
 
@@ -184,17 +181,23 @@ CREATE TABLE `users` (
   `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `gender` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contact` int(11) DEFAULT NULL,
+  `dob` date DEFAULT NULL,
+  `level` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image_Path` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `address`) VALUES
-(1, 'Mohamad Luqman bin Ahmad', 'luqmanahmad5149@gmail.com', NULL, '$2y$10$7e5CR2zc2t6V8GQin24if.j8.NHJhRIVBetYTY4kuI69qW3tjtc32', 'D4U2LsCcuJSRrbkLDIi2qD2zsWhV0VX6L5JTQQ3T48R8Oct3Hsfz7vPPVifR', '2021-05-17 05:23:24', '2021-05-17 05:23:24', ''),
-(2, 'Luqman Ahmad', 'luqmanahmad@gmail.com', NULL, '$2y$10$r5O5y1cherclqQ5WWxlX..84cVa7e1JA.xJUNmFRIkDxsS19bpRyC', 'd2TfLcZ4Ha1lzeHsjS7HU5RJnThaHDO3YN6l33F1cxJv2aDuMY7ZE2BW5ks1', '2021-06-15 03:34:33', '2021-06-15 03:34:33', 'Taman bahtera, 35900 Tanjong Malim, Perak'),
-(3, 'Ali Baba', 'alibaba@gmail.com', NULL, '$2y$10$vBjOs3RqPQgQis6tkKUVjOl/P23lT4KXUPVsSL0gGlejXugwPDhMC', NULL, '2021-06-18 21:20:07', '2021-06-18 21:20:07', 'jalan damai indah, padang serai');
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`, `address`, `gender`, `contact`, `dob`, `level`, `image_Path`) VALUES
+(1, 'Mohamad Luqman bin Ahmad', 'luqmanahmad5149@gmail.com', NULL, '$2y$10$7e5CR2zc2t6V8GQin24if.j8.NHJhRIVBetYTY4kuI69qW3tjtc32', 'D4U2LsCcuJSRrbkLDIi2qD2zsWhV0VX6L5JTQQ3T48R8Oct3Hsfz7vPPVifR', '2021-05-17 05:23:24', '2021-05-17 05:23:24', '', NULL, NULL, NULL, 'user', NULL),
+(2, 'Luqman Ahmad', 'luqmanahmad@gmail.com', NULL, '$2y$10$r5O5y1cherclqQ5WWxlX..84cVa7e1JA.xJUNmFRIkDxsS19bpRyC', '2xmIiiPTJlSGLBDRCjPQ7AEoI3jH658PdP0FgPD7DiQjIVZ3cUD8Bb8C0VaN', '2021-06-15 03:34:33', '2021-06-15 03:34:33', 'Taman bahtera, 35900 Tanjong Malim, Perak', NULL, NULL, NULL, 'admin', NULL),
+(3, 'Ali Babas', 'alibaba@gmail.com', NULL, '$2y$10$vBjOs3RqPQgQis6tkKUVjOl/P23lT4KXUPVsSL0gGlejXugwPDhMC', NULL, '2021-06-18 21:20:07', '2021-06-18 21:20:07', '1/1 Jalan Setiawangsa, 20 Taman Bersama, 09000, Selangor', 'Female', 144853341, '1988-11-07', 'user', '60dc6a0234e8c-Ali Babas.jpg'),
+(4, 'yusuf tayub', 'yusuftayub@yahoo.com', NULL, '$2y$10$K3f9wIjdLGMqJK2Htsx29eEGiiClrGBtLMdzn4W48HyP7CAqsBz3u', 'lMVhIJqvoBGooXQJxK3UoNdz9IHl8ptqbGytXa8HiaXUvOg3sFBEYBvCD5TR', '2021-06-29 19:20:07', '2021-06-29 19:20:07', 'Taman Bahtera, Lorong Bahtera 2/2, 35900 Tanjong Malin, Perak', 'Male', 124853341, '1998-02-13', 'user', '60dc66e9d50e3-yusuf tayub.jpg');
 
 --
 -- Indexes for dumped tables
@@ -257,7 +260,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -269,25 +272,25 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

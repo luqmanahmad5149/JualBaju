@@ -97,8 +97,8 @@
                 </div>
             @endforeach
         </div>
-        <div class="px-15">
+        {{-- <div class="px-15">
             {{ $products->links() }}
-        </div>
+        </div> --}}
     </div>
 @endsection

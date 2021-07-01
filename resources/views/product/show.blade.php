@@ -14,7 +14,7 @@
         </div>
         <div>
             <a 
-                href="/"
+                href="javascript:history.back()"
                 class="text-gray-500 italic hover:text-gray-900 pb-1 text-2xl border-b-2">
                 Go Back
             </a>

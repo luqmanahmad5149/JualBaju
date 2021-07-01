@@ -236,4 +236,16 @@ class ProductsController extends Controller
         return view('product.orderhistory')->with('orders', $orders);
     }
 
+    public function search(Request $request)
+    {
+        $search_text = $request->search;
+        // $products = Product::where('name', 'LIKE', '%' . $search_text . '%')->get();
+        $products = DB::table('products')
+            ->where('products.name', 'LIKE', '%' . $search_text . '%')
+            ->orWhere('products.category', 'LIKE', '%' . $search_text . '%')
+            ->get();
+
+        return view('product.search', compact('products', 'search_text'));
+    }
+
 }
