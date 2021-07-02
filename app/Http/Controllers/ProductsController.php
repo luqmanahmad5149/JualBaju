@@ -217,6 +217,7 @@ class ProductsController extends Controller
             $order->status = 'On Delivery';
             $order->save();
             Cart::where('id', $cart['id'])->delete();
+            Product::where('id', $cart['product_id'])->delete();
         }
 
         return redirect('/');
