@@ -18,11 +18,11 @@
             </tr>
             <tr>
               <td class="py-1">Delivery</td>
-              <td class="py-1">RM 8.00</td>
+              <td class="py-1">RM 0.00</td>
             </tr>
             <tr>
               <td class="py-1">Total Amount</td>
-              <td class="py-1">RM {{ $total + 8 }}</td>
+              <td class="py-1">RM {{ $total }}</td>
             </tr>
           </tbody>
       </table>
@@ -33,15 +33,6 @@
       action="/orderplace"
       method="POST">
       @csrf
-      {{-- <div class="block mb-2">
-        <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-8">Your Name: </label>
-        <input 
-            type="text" 
-            name="name" 
-            value="{{ $user->name }}"
-            class="appearance-none w-64 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
-      </div> --}}
-
       <div class="block mb-7">
           <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-10 block pb-4">Address: </label>
           <textarea 
