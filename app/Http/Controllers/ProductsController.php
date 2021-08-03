@@ -71,7 +71,6 @@ class ProductsController extends Controller
 
         return redirect('/product')
             ->with('message', 'Your product has been added!');
-
     }
 
     /**
@@ -217,7 +216,7 @@ class ProductsController extends Controller
             $order->status = 'On Delivery';
             $order->save();
             Cart::where('id', $cart['id'])->delete();
-            Product::where('id', $cart['product_id'])->delete();
+            // Product::where('id', $cart['product_id'])->delete();
         }
 
         return redirect('/');

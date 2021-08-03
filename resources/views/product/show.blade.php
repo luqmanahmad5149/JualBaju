@@ -42,11 +42,11 @@
             <h3 class="font-bold text-gray-700 pt-9 pb-4 text-4xl">
                 RM {{ $product->price }}
             </h3>
-            <h4 class="pb-4 pt-6 text-2xl font-bold">
-                Description: <span class="font-normal">{{ $product->description }}</span>
+            <h4 class="pb-4 pt-6 text-2xl font-bold capitalize">
+                Description: <span class="font-normal leading-relaxed">{{ $product->description }}</span>
             </h4>
             <h4 class="capitalize pb-6 pt-4 text-2xl font-bold">
-                Category: <span class="font-normal">{{ $product->category }}</span>
+                Category: <span class="font-normal leading-relaxed">{{ $product->category }}</span>
             </h4>
             <div class="sm:grid grid-cols-2 gap-15 py-5 px-5">
                 <span>

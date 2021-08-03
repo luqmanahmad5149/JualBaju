@@ -6,10 +6,10 @@
     </div>
 
     @if ($errors->any())
-        <div class="w-4/5 m-auto p-3 text-center">
-            <ul>
+        <div class="w-4/5 m-auto text-center">
+            <ul class="grid grid-cols-4 gap-x-2">
                 @foreach ($errors->all() as $error)
-                    <li class="w-1/5 mb-4 text-gray-50 bg-red-700 rounded-2xl py-4">
+                    <li class="text-gray-50 bg-red-700 rounded-2xl py-4 mt-5">
                         {{ $error }}
                     </li>
                 @endforeach
@@ -29,7 +29,7 @@
                 <input 
                     type="text" 
                     name="name"
-                    value="{{ $product->name }}"
+                    value="{{ old('name') ?? $product->name }}"
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
             </div>
             <div class="block mb-7">
@@ -37,21 +37,21 @@
                 <input 
                     type="text" 
                     name="price"
-                    value="{{ $product->price }}"
+                    value="{{ old('price') ?? $product->price }}"
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
             </div>
             <div class="block mb-7">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold block pb-4">Category: </label>
                 <select 
                     name="category"
-                    class="apperance none w-1/6 h-10 bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight px-4">
-                    <option value="">Select Category</option>
-                    <option value="swimming suit">Swimming suit</option>
-                    <option value="airism">Airism</option>
-                    <option value="suit">Suit</option>
-                    <option value="trouser">Trouser</option>
-                    <option value="t-shirt">T-shirt</option>
-                    <option value="jeans">Jeans</option>
+                    class="apperance none w-1/6 h-10 bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight px-4 capitalize">
+                    <option value="{{ $product->category }}">{{ $product->category }}</option>
+                    <option value="swimming suit" {{ old('swimming suit') == "swimming suit" ? 'selected' : '' }}>Swimming suit</option>
+                    <option value="airism" {{ old('airism') == "airism" ? 'selected' : '' }}>Airism</option>
+                    <option value="suit" {{ old('suit') == "suit" ? 'selected' : '' }}>Suit</option>
+                    <option value="trouser" {{ old('trouser') == "trouser" ? 'selected' : '' }}>Trouser</option>
+                    <option value="t-shirt" {{ old('t-shirt') == "t-shirt" ? 'selected' : '' }}>T-shirt</option>
+                    <option value="jeans" {{ old('jeans') == "jeans" ? 'selected' : '' }}>Jeans</option>
                 </select>
             </div> 
 
@@ -61,7 +61,7 @@
                     name="description" 
                     cols="50"
                     rows="6"
-                    class="text-area apperance none bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight py-3 px-4 mb-3">{{ $product->description }}</textarea>
+                    class="text-area apperance none bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight py-3 px-4 mb-3">{{ old('description') ?? $product->description }}</textarea>
             </div>  
 
             <div class="bg-grey-lighter">
@@ -77,6 +77,7 @@
             </div>
 
             <button 
+                id="ajax-submit"
                 type="submit"
                 class="uppercase mt-10 shadow-lg bg-yellow-500 hover:bg-yellow-400 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-2xl">
                 Submit Item

@@ -2,11 +2,12 @@
 
 @section('content')
     @if (session()->has('message'))
-    <div class="w-full mt-10 p-1 text-center">
-        <p class="mb-4 text-gray-50 bg-green-500 rounded-md py-3">
-            {{ session()->get('message') }}
-        </p>
-    </div>
+    <div id="session_message" class="m-10 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Hey!</strong>
+        <span class="block sm:inline">{{ session()->get('message') }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <a href="#" class="fa fa-times" id="close"></a>
+    </div> 
     @endif
     <div class="border-b border-gray-200 mt-4 pb-6 w-4/5 m-auto pt-10 flex justify-center">
         <h4 class="text-3xl font-bold ">User Profile</h4>
