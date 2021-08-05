@@ -50,7 +50,9 @@ class ProductsController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'size' => 'required',
             'category' => 'required',
             'description' => 'required',
             'image' => 'required|mimes:png,jpg,jpeg|max:5048',
@@ -59,7 +61,7 @@ class ProductsController extends Controller
         $newImageName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
         $request->image->move(public_path('images'), $newImageName);
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->input('name'),
             'price' => $request->input('price'),
             'category' => $request->input('category'),
@@ -67,6 +69,14 @@ class ProductsController extends Controller
             'image_path' => $newImageName,
             'user_id' => auth()->user()->id,
             'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
+        ]);
+
+        $product_id = $product->id;
+
+        DB::table('quantities')->insert([
+            'product_id' => $product_id,
+            'size' => $request->input('size'),
+            'quantity' => $request->input('quantity'),
         ]);
 
         return redirect('/product')
@@ -81,8 +91,14 @@ class ProductsController extends Controller
      */
     public function show($slug)
     {
+        $product = DB::table('products')
+                    ->join('quantities', 'products.id', '=', 'quantities.product_id')
+                    ->select('products.*', 'quantities.size', 'quantities.quantity')
+                    ->where('products.slug', '=', $slug)
+                    ->first();
+
         return view('product.show')
-            ->with('product', Product::where('slug', $slug)->first());
+            ->with('product', $product);
     }
 
     /**
@@ -93,7 +109,13 @@ class ProductsController extends Controller
      */
     public function edit($slug)
     {
-        return view('product.edit')->with('product', Product::where('slug', $slug)->first());
+        $product = DB::table('products')
+        ->join('quantities', 'products.id', '=', 'quantities.product_id')
+        ->select('products.*', 'quantities.size', 'quantities.quantity')
+        ->where('products.slug', '=', $slug)
+        ->first();
+
+        return view('product.edit')->with('product', $product);
     }
 
     /**
@@ -122,6 +144,15 @@ class ProductsController extends Controller
                 'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
             ]);
 
+        $product_id = $request->input('product_id');
+
+        DB::table('quantities')
+            ->where('product_id', $product_id)
+            ->update([
+                'size' => $request->input('size'),
+                'quantity' => $request->input('quantity'),
+            ]);
+
         return redirect('/product')->with('message', 'Your product has been updated!');
     }
 
@@ -143,19 +174,34 @@ class ProductsController extends Controller
     {
         if (auth()->user())
         {
-            Cart::create([
-                'product_id' => $request->input('product_id'),
-                'user_id' => auth()->user()->id,
-            ]);
-    
-            return redirect('/')
-            ->with('message', 'Product added to cart!');
+            $product = DB::table('quantities')->select('quantity')->where('product_id', $request->input('product_id'))->first();
+
+            if($request->input('quantity') == 0) {
+                return redirect()
+                    ->back()
+                    ->with('message', "Don't forget to state how many you want to buy.");
+            }   else {
+                if($product->quantity >= 1){
+                    Cart::create([
+                        'product_id' => $request->input('product_id'),
+                        'user_id' => auth()->user()->id,
+                        'quantity' => $request->input('quantity'),
+                    ]);
+                    return redirect()
+                        ->back()
+                        ->with('message', 'Your product has been added to cart!');
+                } else{
+                    return redirect()
+                    ->back()
+                    ->with('message', 'Product is out of stock');
+                }
+            }
+
         }
         else
         {
             return redirect('/login');
         }
-
     }
 
     public static function cartItem()
@@ -171,10 +217,10 @@ class ProductsController extends Controller
 
         $products = DB::table('carts')
             ->join('products', 'carts.product_id', '=', 'products.id')
+            ->join('quantities', 'carts.product_id', '=', 'quantities.product_id')
             ->where('carts.user_id', $userId)
-            ->select('products.*','carts.id as cart_id' )
+            ->select('products.*','carts.id as cart_id', 'carts.quantity as cart_quantity', 'quantities.size as product_size' )
             ->get();
-
             return view('product.cartlist')->with('products', $products);
     }
 
@@ -193,33 +239,51 @@ class ProductsController extends Controller
         $total = DB::table('carts')
             ->join('products', 'carts.product_id', '=', 'products.id')
             ->where('carts.user_id', $userId)
-            ->sum('products.price');
+            ->sum(DB::raw('products.price * carts.quantity'));
+        
+        $user = DB::table('users')
+            ->where('id', $userId)
+            ->first();
 
-        $user = DB::table('users')->where('id', $userId)->first();
+        $products = DB::table('carts')
+            ->join('products', 'carts.product_id', '=', 'products.id')
+            ->join('quantities', 'carts.product_id', '=', 'quantities.product_id')
+            ->where('carts.user_id', $userId)
+            ->select('carts.*', 'products.name', 'products.price', 'quantities.size', DB::raw('products.price * carts.quantity as total_price'))
+            ->get();
 
-        return view('product.ordernow', compact('total', 'user'));
+        return view('product.ordernow', compact('total', 'user', 'products'));
     }
 
     public function orderPlace(Request $request)
     {
         $userId = auth()->user()->id;
 
-        $allCart = Cart::where('user_id', $userId)->get();
+        $allCart = DB::table('carts')
+            ->join('products', 'carts.product_id', '=', 'products.id')
+            ->select('carts.*', 'products.price', DB::raw('products.price * carts.quantity as total_price'))
+            ->get();
+
         foreach( $allCart as $cart)
         {
             $order = new Order;
-            $order->product_id = $cart['product_id'];
-            $order->user_id = $cart['user_id'];
+            $order->product_id = $cart->product_id;
+            $order->user_id = $userId;
             $order->address = $request->input('address');
+            $order->total_payment = $cart->total_price;
+            $order->quantity = $cart->quantity;
             $order->payment_method = $request->input('payment');
             $order->payment_status = 'Succesful';
             $order->status = 'On Delivery';
             $order->save();
-            Cart::where('id', $cart['id'])->delete();
-            // Product::where('id', $cart['product_id'])->delete();
+            Cart::where('id', $cart->id)->delete();
+
+            DB::table('quantities')
+                ->where('product_id', $cart->product_id)
+                ->decrement('quantity', $cart->quantity);
         }
 
-        return redirect('/');
+        return redirect('/')->with('message', 'Order has been placed!');
     }
 
     public function orderHistory()
@@ -228,8 +292,9 @@ class ProductsController extends Controller
 
         $orders = DB::table('orders')
             ->join('products', 'orders.product_id', '=', 'products.id')
+            ->join('quantities', 'orders.product_id', '=', 'quantities.product_id')
             ->where('orders.user_id', $userId)
-            ->select('orders.*', 'products.name as product_name', 'products.image_path as product_image', 'products.slug as product_slug', 'products.price as product_price')
+            ->select('orders.*', 'products.name as product_name', 'products.image_path as product_image', 'products.slug as product_slug', 'products.price as product_price', 'quantities.size as product_size')
             ->orderBy('created_at', 'DESC')
             ->get();
         

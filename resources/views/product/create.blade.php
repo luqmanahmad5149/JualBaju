@@ -6,10 +6,10 @@
     </div>
 
     @if ($errors->any())
-        <div class="w-4/5 m-auto p-3 text-center">
-            <ul>
+        <div class="w-4/5 m-auto text-center">
+            <ul class="grid grid-cols-4 gap-x-2">
                 @foreach ($errors->all() as $error)
-                    <li class="w-1/5 mb-4 text-gray-50 bg-red-700 rounded-2xl py-4">
+                    <li class="text-gray-50 bg-red-700 rounded-2xl py-4 mt-5">
                         {{ $error }}
                     </li>
                 @endforeach
@@ -33,7 +33,7 @@
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3"
                     value="{{ old('name') }}">
             </div>
-            <div class="block mb-7">
+            <div class="block mb-2">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-28">Price: </label>
                 <input 
                     id="price"
@@ -42,6 +42,28 @@
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3"
                     value="{{ old('price') }}">
             </div>
+            <div class="block mb-5">
+                <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-16">Quantity: </label>
+                <input 
+                    id="quantity"
+                    type="text" 
+                    name="quantity" 
+                    class="appearance-none w-1/5 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3 ml-2"
+                    value="{{ old('quantity') }}">
+            </div>
+            <div class="block mb-7">
+                <label class="uppercase tracking-wide text-gray-700 text-l font-bold block pb-4">Size: </label>
+                <select 
+                    id="size"
+                    name="size" 
+                    class="apperance none w-1/6 h-10 bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight px-4">
+                    <option value="">Select Size</option>
+                    <option value="S" {{ old('size') == "S" ? 'selected' : '' }}>S</option>
+                    <option value="M" {{ old('size') == "M" ? 'selected' : '' }}>M</option>
+                    <option value="L" {{ old('size') == "L" ? 'selected' : '' }}>L</option>
+                    <option value="XL" {{ old('size') == "XL" ? 'selected' : '' }}>XL</option>
+                </select>
+            </div> 
             <div class="block mb-7">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold block pb-4">Category: </label>
                 <select 
@@ -57,7 +79,6 @@
                     <option value="jeans" {{ old('category') == "jeans" ? 'selected' : '' }}>Jeans</option>
                 </select>
             </div> 
-
             <div class="block mb-7">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-10 block pb-4">Description: </label>
                 <textarea 

@@ -31,8 +31,9 @@
                     name="name"
                     value="{{ old('name') ?? $product->name }}"
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
+                <input type="hidden" value="{{ $product->id }}" name="product_id">
             </div>
-            <div class="block mb-7">
+            <div class="block mb-2">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-28">Price: </label>
                 <input 
                     type="text" 
@@ -40,6 +41,28 @@
                     value="{{ old('price') ?? $product->price }}"
                     class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
             </div>
+            <div class="block mb-5">
+                <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-16">Quantity: </label>
+                <input 
+                    id="quantity"
+                    type="text" 
+                    name="quantity" 
+                    class="appearance-none w-1/5 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3 ml-2"
+                    value="{{ old('quantity') ?? $product->quantity }}">
+            </div>
+            <div class="block mb-7">
+                <label class="uppercase tracking-wide text-gray-700 text-l font-bold block pb-4">Size: </label>
+                <select 
+                    id="size"
+                    name="size" 
+                    class="apperance none w-1/6 h-10 bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight px-4">
+                    <option value="{{ $product->size }}">{{ $product->size }}</option>
+                    <option value="S" {{ old('size') == "S" ? 'selected' : '' }}>S</option>
+                    <option value="M" {{ old('size') == "M" ? 'selected' : '' }}>M</option>
+                    <option value="L" {{ old('size') == "L" ? 'selected' : '' }}>L</option>
+                    <option value="XL" {{ old('size') == "XL" ? 'selected' : '' }}>XL</option>
+                </select>
+            </div> 
             <div class="block mb-7">
                 <label class="uppercase tracking-wide text-gray-700 text-l font-bold block pb-4">Category: </label>
                 <select 
