@@ -23,7 +23,7 @@
                             </div>
                             <div class="m-4 p-2">
                                 <span class="text-md capitalize">{{ $order->product_name }} ({{ $order->product_size }})</span>
-                                <span class="block font-bold text-gray-700 text-sm pt-2">RM {{ number_format($order->total_payment, 2, '.', '') }}</span>
+                                <span class="block text-md capitalize pt-2">Total Prices: <span class="font-bold text-md text-gray-700">RM {{ $order->total_payment }}</span></span>
                                 <span class="block text-md capitalize pt-2">Items Quantity: <span class="font-bold text-md">{{ $order->quantity }}</span></span>
                                 <span class="block text-md capitalize pt-2">Payment Status: <span class="font-bold text-md">{{ $order->payment_status }}</span></span>
                                 <span class="block text-md capitalize pt-2">Purchase On: <span class="font-bold text-md">{{ date('jS M Y', strtotime($order->created_at)) }}</span></span>
