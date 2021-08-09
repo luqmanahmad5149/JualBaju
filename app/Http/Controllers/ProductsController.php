@@ -115,7 +115,8 @@ class ProductsController extends Controller
         ->where('products.slug', '=', $slug)
         ->first();
 
-        return view('product.edit')->with('product', $product);
+        return view('product.edit')
+            ->with('product', $product);
     }
 
     /**

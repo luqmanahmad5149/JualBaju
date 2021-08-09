@@ -58,7 +58,7 @@
         </div>
         <div>
             <h3 class="text-l sm:font-bold text-gray-100">
-                Follow us
+                Follow Us
             </h3>
     
             <ul class="py-4 sm:text-s pt-4 text-gray-400">
