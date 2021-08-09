@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'index']);
 
+Route::get('get-more-products', [PagesController::class, 'getMoreProducts'])->name('products.get-more-products');
+
 Route::resource('/product', ProductsController::class);
 
 Route::post('/add_to_cart', [ProductsController::class, 'addToCart']);

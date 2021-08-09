@@ -27,6 +27,8 @@
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-skyblue.min.css">
     <link rel="stylesheet" href=" {{mix ('css/style.css')}}"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none font-sans">
     <div id="app">
@@ -83,13 +85,35 @@
             @include('layouts.footer')
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
     <script>
         new Splide( '.splide', {
             type: 'loop',
             rewind : true,
             autoplay: true,
         } ).mount();
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("#close").click(function(){
+                $("#session_message").hide();
+            });
+            
+            $(document).on('click', '[role="navigation"] a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                getMoreProducts(page);
+            });
+
+            function getMoreProducts(page){
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('products.get-more-products') }}" + "?page=" + page,
+                    success: function(data){
+                        $('#product_data').html(data);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>

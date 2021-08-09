@@ -24,7 +24,7 @@
                                     class="w-2/5 h-32 sm:h-48 object-scale-down object-center">
                             </div>
                             <div class="m-4 p-2">
-                                <span class="text-1xl capitalize">{{ $product->name }}</span>
+                                <span class="text-1xl capitalize">{{ $product->name }} ({{ $product->product_size }})</span>
                                 <span class="float-right">
                                     <form 
                                         action="/removecart/{{ $product->cart_id }}"
@@ -37,7 +37,7 @@
                                         </button>
                                     </form>
                                 </span>
-                                <span class="block font-bold text-gray-700 text-sm pt-2">RM {{ $product->price }}</span>
+                                <span class="block font-bold text-gray-700 text-lg pt-2">RM {{ $product->price }} x {{ $product->cart_quantity }}</span>
                             </div>
                         </a>
                     </div>
