@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Products;
+use Validator;
 
 class ProductsController extends Controller
 {
@@ -37,7 +38,11 @@ class ProductsController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        $userId = auth()->user()->id;
+
+        $user = User::where('id', $userId)->first();
+
+        return view('product.create', compact('user', $user));
     }
 
     /**
@@ -48,40 +53,82 @@ class ProductsController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
             'price' => 'required|numeric',
             'quantity' => 'required|numeric',
             'size' => 'required',
             'category' => 'required',
             'description' => 'required',
-            'image' => 'required|mimes:png,jpg,jpeg|max:5048',
+            'image' => 'required|mimes:png,jpg,jpeg|max:5048'
         ]);
 
-        $newImageName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
-        $request->image->move(public_path('images'), $newImageName);
+        if(!$validator->passes()){
+            return response()->json(['status'=>0, 'error'=>$validator->errors()->toArray()]);
+        } else {
+            $newImageName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
+            $request->image->move(public_path('images'), $newImageName);
+    
+            $product = Product::create([
+                'name' => $request->input('name'),
+                'price' => $request->input('price'),
+                'category' => $request->input('category'),
+                'description' => $request->input('description'),
+                'image_path' => $newImageName,
+                'user_id' => auth()->user()->id,
+                'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
+            ]);
+    
+            $product_id = $product->id;
+    
+            $query = DB::table('quantities')->insert([
+                'product_id' => $product_id,
+                'size' => $request->input('size'),
+                'quantity' => $request->input('quantity'),
+            ]);
+    
+            if($query){
+                return response()->json(['status'=>1, 'msg'=> 'Your product has been successfully added!']);
+            }
+        }
 
-        $product = Product::create([
-            'name' => $request->input('name'),
-            'price' => $request->input('price'),
-            'category' => $request->input('category'),
-            'description' => $request->input('description'),
-            'image_path' => $newImageName,
-            'user_id' => auth()->user()->id,
-            'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
-        ]);
-
-        $product_id = $product->id;
-
-        DB::table('quantities')->insert([
-            'product_id' => $product_id,
-            'size' => $request->input('size'),
-            'quantity' => $request->input('quantity'),
-        ]);
-
-        return redirect('/product')
-            ->with('message', 'Your product has been added!');
     }
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'price' => 'required|numeric',
+    //         'quantity' => 'required|numeric',
+    //         'size' => 'required',
+    //         'category' => 'required',
+    //         'description' => 'required',
+    //         'image' => 'required|mimes:png,jpg,jpeg|max:5048',
+    //     ]);
+
+    //     $newImageName = uniqid() . '-' . $request->name . '.' . $request->image->extension();
+    //     $request->image->move(public_path('images'), $newImageName);
+
+    //     $product = Product::create([
+    //         'name' => $request->input('name'),
+    //         'price' => $request->input('price'),
+    //         'category' => $request->input('category'),
+    //         'description' => $request->input('description'),
+    //         'image_path' => $newImageName,
+    //         'user_id' => auth()->user()->id,
+    //         'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
+    //     ]);
+
+    //     $product_id = $product->id;
+
+    //     DB::table('quantities')->insert([
+    //         'product_id' => $product_id,
+    //         'size' => $request->input('size'),
+    //         'quantity' => $request->input('quantity'),
+    //     ]);
+
+    //     return redirect('/product')
+    //         ->with('message', 'Your product has been added!');
+    // }
 
     /**
      * Display the specified resource.
@@ -115,8 +162,11 @@ class ProductsController extends Controller
         ->where('products.slug', '=', $slug)
         ->first();
 
-        return view('product.edit')
-            ->with('product', $product);
+        $userId = auth()->user()->id;
+
+        $user = User::where('id', $userId)->first();
+
+        return view('product.edit', compact('product', 'user'));
     }
 
     /**
@@ -128,34 +178,72 @@ class ProductsController extends Controller
      */
     public function update(Request $request, $slug)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(),[
             'name' => 'required',
-            'price' => 'required',
+            'price' => 'required|numeric',
+            'quantity' => 'required|numeric',
+            'size' => 'required',
             'category' => 'required',
-            'description' => 'required',
+            'description' => 'required'
         ]);
 
-        Product::where('slug', $slug)
-            ->update([
-                'name' => $request->input('name'),
-                'price' => $request->input('price'),
-                'category' => $request->input('category'),
-                'description' => $request->input('description'),
-                'user_id' => auth()->user()->id,
-                'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
-            ]);
+        if(!$validator->passes()){
+            return response()->json(['status'=>0, 'error'=>$validator->errors()->toArray()]);
+        } else {
+            Product::where('slug', $slug)
+                ->update([
+                    'name' => $request->input('name'),
+                    'price' => $request->input('price'),
+                    'category' => $request->input('category'),
+                    'description' => $request->input('description'),
+                    'user_id' => auth()->user()->id,
+                    'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
+                ]);
+    
+            $product_id = $request->input('product_id');
+    
+            DB::table('quantities')
+                ->where('product_id', $product_id)
+                ->update([
+                    'size' => $request->input('size'),
+                    'quantity' => $request->input('quantity'),
+                ]);
+    
+            return response()->json(['status'=>1, 'msg'=> 'Your product has been successfully updated!']);
 
-        $product_id = $request->input('product_id');
+        }
 
-        DB::table('quantities')
-            ->where('product_id', $product_id)
-            ->update([
-                'size' => $request->input('size'),
-                'quantity' => $request->input('quantity'),
-            ]);
-
-        return redirect('/product')->with('message', 'Your product has been updated!');
     }
+    // public function update(Request $request, $slug)
+    // {
+    //     $request->validate([
+    //         'name' => 'required',
+    //         'price' => 'required',
+    //         'category' => 'required',
+    //         'description' => 'required',
+    //     ]);
+
+    //     Product::where('slug', $slug)
+    //         ->update([
+    //             'name' => $request->input('name'),
+    //             'price' => $request->input('price'),
+    //             'category' => $request->input('category'),
+    //             'description' => $request->input('description'),
+    //             'user_id' => auth()->user()->id,
+    //             'slug' => SlugService::createSlug(Product::class, 'slug', $request->name),
+    //         ]);
+
+    //     $product_id = $request->input('product_id');
+
+    //     DB::table('quantities')
+    //         ->where('product_id', $product_id)
+    //         ->update([
+    //             'size' => $request->input('size'),
+    //             'quantity' => $request->input('quantity'),
+    //         ]);
+
+    //     return redirect('/product')->with('message', 'Your product has been updated!');
+    // }
 
     /**
      * Remove the specified resource from storage.
@@ -168,7 +256,7 @@ class ProductsController extends Controller
         $product = Product::where('slug', $slug);
         $product->delete();
 
-        return redirect('/')->with('message', 'Your product has been deleted!');        
+        return redirect('/')->with('message', 'Your product has been successfully deleted!');        
     }
 
     public function addToCart(Request $request)
@@ -190,7 +278,7 @@ class ProductsController extends Controller
                     ]);
                     return redirect()
                         ->back()
-                        ->with('message', 'Your product has been added to cart!');
+                        ->with('message', 'Your product has been successfully added to cart!');
                 } else{
                     return redirect()
                     ->back()
@@ -222,17 +310,31 @@ class ProductsController extends Controller
             ->where('carts.user_id', $userId)
             ->select('products.*','carts.id as cart_id', 'carts.quantity as cart_quantity', 'quantities.size as product_size' )
             ->get();
-            return view('product.cartlist')->with('products', $products);
+
+        return view('product.cartlist')->with('products', $products);
+    }
+
+    public function getCartlist()
+    {
+        $userId = auth()->user()->id;
+
+        $products = DB::table('carts')
+            ->join('products', 'carts.product_id', '=', 'products.id')
+            ->join('quantities', 'carts.product_id', '=', 'quantities.product_id')
+            ->where('carts.user_id', $userId)
+            ->select('products.*','carts.id as cart_id', 'carts.quantity as cart_quantity', 'quantities.size as product_size' )
+            ->get();
+
+        return view('product.cartlist_data', compact('products'))->render();
     }
 
     public function removeCart($id)
     {
         $cart = Cart::where('id', $id);
         $cart->delete();
-
-        return redirect('/cartlist');     
+        // return redirect('/cartlist');     
     }
-
+    
     public function orderNow()
     {
         $userId = auth()->user()->id;
@@ -284,7 +386,7 @@ class ProductsController extends Controller
                 ->decrement('quantity', $cart->quantity);
         }
 
-        return redirect('/')->with('message', 'Order has been placed!');
+        return redirect('/')->with('message', 'Order has been successfully placed!');
     }
 
     public function orderHistory()

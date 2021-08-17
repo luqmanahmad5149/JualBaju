@@ -1,6 +1,33 @@
 @extends('layouts.app')
 
 @section('content')
+    <div id="delete-modal" hidden>
+        <div class="min-w-screen h-screen animated fadeIn faster  fixed  left-0 top-0 flex justify-center items-center inset-0 z-50 outline-none focus:outline-none bg-no-repeat bg-center bg-cover">
+            <div class="w-full  max-w-lg p-5 relative mx-auto my-auto rounded-xl shadow-lg  bg-white ">
+                <!--content-->
+                <div>
+                    <!--body-->
+                    <div class="text-center p-5 flex-auto justify-center">
+                        <h2 class="text-xl font-bold py-4 ">Are you sure?</h3>
+                        <p class="text-sm text-gray-500 px-8">Do you really want to delete this item? This process cannot be undone</p>    
+                    </div>
+                    <!--footer-->
+                    <div class="p-3 mt-2 text-center space-x-13 flex flex-row justify-center items-center">
+                        <button id="close-delete-modal" class="mb-2 md:mb-0 bg-white px-5 py-2 text-sm shadow-sm font-medium tracking-wider border text-gray-600 rounded-full hover:shadow-lg hover:bg-gray-100 w-32">
+                            Cancel
+                        </button>
+                        <form 
+                        action="/product/{{ $product->slug }}"
+                        method="POST">
+                        @csrf
+                        @method('delete')
+                            <button class="mb-2 md:mb-0 bg-red-500 border border-red-500 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg hover:bg-red-600 w-32">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @if (session()->has('message'))
     <div id="session_message" class="m-10 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <strong class="font-bold">Hey! </strong>
@@ -21,11 +48,6 @@
             <img src="/images/{{ $product->image_path }}" alt="" class="w-96 h-96 object-scale-down object-center">
         </div>
         <div>
-            <a 
-                href="javascript:history.back()"
-                class="text-gray-500 italic hover:text-gray-900 pb-1 text-2xl border-b-2">
-                Go Back
-            </a>
             @if (isset(Auth::user()->id) && Auth::user()->id == $product->user_id)
                 <span class="float-right">
                     <a 
@@ -35,16 +57,11 @@
                     </a>
                 </span>
                 <span class="float-right">
-                    <form 
-                        action="/product/{{ $product->slug }}"
-                        method="POST">
-                        @csrf
-                        @method('delete')
-                        <button 
-                            class="text-gray-500 italic hover:text-gray-900 pb-1 text-2xl border-b-2 ml-8">
-                            Delete
-                        </button>
-                    </form>
+                    <button 
+                        id="open-delete-modal"
+                        class="text-gray-500 italic hover:text-gray-900 pb-1 text-2xl border-b-2 ml-8">
+                        Delete
+                    </button>
                 </span>
             @endif
             <h3 class="font-bold text-gray-700 pt-9 pb-4 text-4xl">

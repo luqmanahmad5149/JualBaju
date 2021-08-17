@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [PagesController::class, 'index']);
+Route::post('/product/create', [ProductsController::class, 'store'])->name('product.store');
+
+Route::post('/product/edit/{slug}', [ProductsController::class, 'update'])->name('product.update');
+
+Route::get('/', [PagesController::class, 'index'])->name('product.home');
 
 Route::get('get-more-products', [PagesController::class, 'getMoreProducts'])->name('products.get-more-products');
 
@@ -26,9 +30,11 @@ Route::post('/add_to_cart', [ProductsController::class, 'addToCart']);
 
 Route::post('/orderplace', [ProductsController::class, 'orderPlace']);
 
-Route::get('/cartlist', [ProductsController::class, 'cartList']);
+Route::get('/cartlist', [ProductsController::class, 'cartList'])->name('cartlist');
 
-Route::delete('/removecart/{id}', [ProductsController::class, 'removeCart']);
+Route::get('get-cartlist', [ProductsController::class, 'getCartlist'])->name('products.get-cartlist');
+
+Route::post('/removecart/{id}', [ProductsController::class, 'removeCart']);
 
 Route::get('/ordernow', [ProductsController::class, 'orderNow']);
 
