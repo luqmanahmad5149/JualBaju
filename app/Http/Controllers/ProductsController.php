@@ -9,8 +9,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Exception;
 use Products;
 use Validator;
+use Stripe;
 
 class ProductsController extends Controller
 {
@@ -251,10 +253,22 @@ class ProductsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug)
+    public function destroy($id)
     {
-        $product = Product::where('slug', $slug);
-        $product->delete();
+        // $product = Product::where('id', $id);
+        // $product->delete();
+
+        $product = DB::table('products')
+            ->where('id', $id)
+            ->first();
+
+        $imagePath = "images/".$product->image_path;
+
+        if(file_exists($imagePath)){
+            unlink($imagePath);
+        }
+
+        $product = Product::where('id', $id)->delete();
 
         return redirect('/')->with('message', 'Your product has been successfully deleted!');        
     }
@@ -362,31 +376,113 @@ class ProductsController extends Controller
     {
         $userId = auth()->user()->id;
 
+        $user = DB::table('users')
+            ->where('id', $userId)
+            ->first(); 
+
         $allCart = DB::table('carts')
             ->join('products', 'carts.product_id', '=', 'products.id')
             ->select('carts.*', 'products.price', DB::raw('products.price * carts.quantity as total_price'))
             ->get();
 
-        foreach( $allCart as $cart)
-        {
-            $order = new Order;
-            $order->product_id = $cart->product_id;
-            $order->user_id = $userId;
-            $order->address = $request->input('address');
-            $order->total_payment = $cart->total_price;
-            $order->quantity = $cart->quantity;
-            $order->payment_method = $request->input('payment');
-            $order->payment_status = 'Succesful';
-            $order->status = 'On Delivery';
-            $order->save();
-            Cart::where('id', $cart->id)->delete();
+        $stripe = Stripe::make(env('STRIPE_KEY'));
 
-            DB::table('quantities')
-                ->where('product_id', $cart->product_id)
-                ->decrement('quantity', $cart->quantity);
+        try{
+            $token = $stripe->tokens()->create([
+                'card' => [
+                    'number' => $request->input('card_number'),
+                    'exp_month' => $request->input('exp_month'),
+                    'exp_year' => $request->input('exp_year'),
+                    'cvc' => $request->input('cvc'),
+                ]
+            ]);     
+
+            if(!isset($token['id'])){
+                return redirect('/ordernow')->with('message', 'Stripe token was not generated correctly.');
+            }
+
+            $customer = $stripe->customers()->create([
+                'name' => $user->name,
+                'email' => $user->email,
+                'phone' => $user->contact,
+                'address' => [
+                    'line1' => '441 1/1 taman damai',
+                    'postal_code' => '09400',
+                    'city' => 'Padang Serai',
+                    'state' => 'Kedah',
+                    'country' => 'Malaysia',
+                ],
+                'shipping' => [
+                    'name' => $user->name,
+                    'address' => [
+                        'line1' => '441 1/1 taman damai',
+                        'postal_code' => '09400',
+                        'city' => 'Padang Serai',
+                        'state' => 'Kedah',
+                        'country' => 'Malaysia',
+                    ]
+                ],
+                'source' => $token['id'],
+            ]); 
+
+            $charge = $stripe->charges()->create([
+                'customer' => $customer['id'],
+                'currency' => 'MYR',
+                'amount' => $request->input('total_payment'),
+                'description' => 'Payment for order'
+            ]);
+
+            if($charge['status'] == 'succeeded')
+            {
+                foreach( $allCart as $cart)
+                {
+                    $order = new Order;
+                    $order->product_id = $cart->product_id;
+                    $order->user_id = $userId;
+                    $order->address = $request->input('address');
+                    $order->total_payment = $cart->total_price;
+                    $order->quantity = $cart->quantity;
+                    $order->payment_method = $request->input('payment');
+                    $order->payment_status = 'Succesful';
+                    $order->status = 'On Delivery';
+                    $order->save();
+                    Cart::where('id', $cart->id)->delete();
+
+                    DB::table('quantities')
+                        ->where('product_id', $cart->product_id)
+                        ->decrement('quantity', $cart->quantity);
+                }
+            }
+            else
+            {
+                return redirect('/ordernow')->with('message', 'Transaction error.');
+            }
+        } catch (Exception $e){
+            return redirect('/ordernow')->with('message', $e->getMessage());
         }
 
-        return redirect('/')->with('message', 'Order has been successfully placed!');
+        return redirect('/product')->with('message', 'Order has been successfully placed!');
+
+        // foreach( $allCart as $cart)
+        // {
+        //     $order = new Order;
+        //     $order->product_id = $cart->product_id;
+        //     $order->user_id = $userId;
+        //     $order->address = $request->input('address');
+        //     $order->total_payment = $cart->total_price;
+        //     $order->quantity = $cart->quantity;
+        //     $order->payment_method = $request->input('payment');
+        //     $order->payment_status = 'Succesful';
+        //     $order->status = 'On Delivery';
+        //     $order->save();
+        //     Cart::where('id', $cart->id)->delete();
+
+        //     DB::table('quantities')
+        //         ->where('product_id', $cart->product_id)
+        //         ->decrement('quantity', $cart->quantity);
+        // }
+
+        // return redirect('/product')->with('message', 'Order has been successfully placed!');
     }
 
     public function orderHistory()

@@ -17,7 +17,7 @@
                             Cancel
                         </button>
                         <form 
-                        action="/product/{{ $product->slug }}"
+                        action="/product/{{ $product->id }}"
                         method="POST">
                         @csrf
                         @method('delete')
