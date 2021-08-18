@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session()->has('message'))
+    <div id="message_visibility" class="m-10 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <strong class="font-bold">Hey!</strong>
+        <span class="block sm:inline">{{ session()->get('message') }}</span>
+        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+        <a href="#" class="fa fa-times" id="close"></a>
+    </div> 
+    @endif
+    
     <div class="border-b border-gray-200 mt-4 pb-4 w-4/5 m-auto pt-10 flex justify-center">
         <h4 class="text-3xl font-bold ">Order List</h4>
     </div>
@@ -77,7 +86,9 @@
         action="/orderplace"
         method="POST">
         @csrf
+
         <input type="hidden" name="delivery_fee" value="4">
+        <input type="hidden" name="total_payment" value="{{ $total }}">
         <div class="block mb-7">
             <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-10 block pb-4">Address: </label>
             <textarea 
@@ -87,7 +98,7 @@
                 class="apperance none bg-gray-50 border border-gray-700 text-gray-700 rounded leading-tight py-3 px-4 mb-3 text-area">{{ $user->address }}</textarea>
         </div>  
 
-        <div class="mt-4">
+        <div class="mt-4 mb-10">
           <span class="uppercase tracking-wide text-gray-700 text-l font-bold pr-10 block pb-4">Payment Method: </span>
           <div class="mt-2">
             <label class="inline-flex items-center">
@@ -103,6 +114,45 @@
               <span class="ml-2">Debit/Credit Card</span>
             </label>
           </div>
+        </div>
+
+        <div class="block mb-2">
+          <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-8">Card Number: </label>
+          <input 
+              id="card_number"
+              type="text" 
+              name="card_number" 
+              class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
+        </div>
+
+        <div class="block mb-2">
+          <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-7">Expiry Month: </label>
+          <input 
+              placeholder="MM"
+              id="exp_month"
+              type="text" 
+              name="exp_month" 
+              class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
+        </div>
+
+
+        <div class="block mb-2">
+          <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-12">Expiry Year: </label>
+          <input 
+              placeholder="YYYY"
+              id="exp_year"
+              type="text" 
+              name="exp_year" 
+              class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3">
+        </div>
+
+        <div class="block mb-2">
+          <label class="uppercase tracking-wide text-gray-700 text-l font-bold pr-28">CVC: </label>
+          <input 
+              id="cvc"
+              type="password" 
+              name="cvc" 
+              class="appearance-none w-1/2 h-10 bg-gray-50 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3 ml-2">
         </div>
 
         <div class="flex justify-center">

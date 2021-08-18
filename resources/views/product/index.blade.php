@@ -2,13 +2,14 @@
 
 @section('content')
     @if (session()->has('message'))
-    <div id="session_message" class="m-10 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-        <strong class="font-bold">Hey!</strong>
-        <span class="block sm:inline">{{ session()->get('message') }}</span>
-        <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
-        <a href="#" class="fa fa-times" id="close"></a>
-    </div> 
+        <div id="message_visibility" class="m-10 text-center bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <strong class="font-bold">Hey!</strong>
+            <span class="block sm:inline">{{ session()->get('message') }}</span>
+            <span class="absolute top-0 bottom-0 right-0 px-4 py-3">
+            <a href="#" class="fa fa-times" id="close"></a>
+        </div> 
     @endif
+
     <div class="my-15 mx-20 bg-white shadow-md">
         <div class="splide m-6">
             <div class="splide__track">
