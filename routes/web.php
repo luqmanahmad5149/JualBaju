@@ -34,7 +34,9 @@ Route::get('/cartlist', [ProductsController::class, 'cartList'])->name('cartlist
 
 Route::get('get-cartlist', [ProductsController::class, 'getCartlist'])->name('products.get-cartlist');
 
-Route::post('/removecart/{id}', [ProductsController::class, 'removeCart']);
+Route::post('/removecart1/{id}', [ProductsController::class, 'removeCart1']);
+
+// Route::post('/removecart/{id}', [ProductsController::class, 'removeCart']);
 
 Route::get('/ordernow', [ProductsController::class, 'orderNow']);
 

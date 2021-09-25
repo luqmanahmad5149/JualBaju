@@ -348,6 +348,13 @@ class ProductsController extends Controller
         $cart->delete();
         // return redirect('/cartlist');     
     }
+
+    public function removeCart1($id)
+    {
+        $cart = Cart::where('id', $id);
+        $cart->delete();
+        return redirect('/cartlist');     
+    }
     
     public function orderNow()
     {
