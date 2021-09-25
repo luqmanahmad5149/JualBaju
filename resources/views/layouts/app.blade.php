@@ -22,11 +22,12 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}" defer></script>
-    
-    <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/css/themes/splide-skyblue.min.css">
     <link rel="stylesheet" href=" {{mix ('css/style.css')}}"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
+    <!-- Styles -->
 </head>
 <body class="bg-gray-100 h-screen antialiased leading-none font-sans">
     <div id="app">
@@ -83,13 +84,137 @@
             @include('layouts.footer')
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@2.4.21/dist/js/splide.min.js"></script>
     <script>
         new Splide( '.splide', {
             type: 'loop',
             rewind : true,
             autoplay: true,
         } ).mount();
+    </script>
+    <script>
+        $(document).ready(function(){
+            $("#close").click(function(){
+                $("#message_visibility").hide();
+            });
+            $("#close").click(function(){
+                $("#session_message").hide();
+            });
+
+            $("#close-modal").click(function(){
+                $("#popup_modal").hide();
+            });
+
+            $("#open-delete-modal").click(function(){
+                $("#delete-modal").show();
+            })
+
+            $("#close-delete-modal").click(function(){
+                $("#delete-modal").hide();
+            })
+            
+            $(document).on('click', '[role="navigation"] a', function(event) {
+                event.preventDefault();
+                var page = $(this).attr('href').split('page=')[1];
+                getMoreProducts(page);
+            });
+
+            function getMoreProducts(page){
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('products.get-more-products') }}" + "?page=" + page,
+                    success: function(data){
+                        $('#product_data').html(data);
+                    }
+                });
+            }
+        });
+
+        $(function(){
+            $("#create_form").on('submit', function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    url:$(this).attr('action'),
+                    method:$(this).attr('method'),
+                    data:new FormData(this),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(document).find('span.error-text').text('');
+                    },
+                    success:function(data){
+                        if(data.status == 0){
+                            $.each(data.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        } 
+                        else {
+                            $('#create_form')[0].reset();
+                            $('#popup_modal').show()
+                            $('#session_message').html(data.msg);
+                        }
+                    }
+                });
+            });
+        });
+
+        $(function(){
+            $("#edit_form").on('submit', function(e){
+                e.preventDefault();
+
+                $.ajax({
+                    url:$(this).attr('action'),
+                    method:$(this).attr('method'),
+                    data:new FormData(this),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(document).find('span.error-text').text('');
+                    },
+                    success:function(data){
+                        if(data.status == 0){
+                            $.each(data.error, function(prefix, val){
+                                $('span.'+prefix+'_error').text(val[0]);
+                            });
+                        } 
+                        else {
+                            $('#popup_modal').show()
+                            $('#session_message').html(data.msg);
+                        }
+                    }
+                });
+            });
+        });
+
+        function getCartList(){
+                $.ajax({
+                    type: "GET",
+                    url: "{{ route('products.get-cartlist') }}",
+                    success: function(data){
+                        $('#cartlist_data').html(data);
+                    }
+                });
+        }
+
+        $(function(){
+        $("#delete_form").on('submit', function(e){
+            e.preventDefault();
+
+            $.ajax({
+                url:$(this).attr('action'),
+                method:$(this).attr('method'),
+                data:new FormData(this),
+                processData:false,
+                dataType:'json',
+                contentType:false
+            });
+        });
+        });
+
+        getCartList();
+        
     </script>
 </body>
 </html>

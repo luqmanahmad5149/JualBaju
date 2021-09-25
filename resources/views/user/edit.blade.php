@@ -87,7 +87,7 @@
                                         <input type="radio" class="form-radio" name="gender" value="Male" checked>
                                         <span class="ml-2 text-gray-700">Male</span>
                                     </label>
-                                    <label class="inline-flex items-center ml-6">
+                                    <label class="inline-flex items-center">
                                         <input type="radio" class="form-radio" name="gender" value="Female">
                                         <span class="ml-2 text-gray-700">Female</span>
                                     </label>
@@ -96,7 +96,7 @@
                                         <input type="radio" class="form-radio" name="gender" value="Male">
                                         <span class="ml-2 text-gray-700">Male</span>
                                     </label>
-                                    <label class="inline-flex items-center ml-6">
+                                    <label class="inline-flex items-center">
                                         <input type="radio" class="form-radio" name="gender" value="Female" checked>
                                         <span class="ml-2 text-gray-700">Female</span>
                                     </label>
@@ -105,7 +105,7 @@
                                         <input type="radio" class="form-radio" name="gender" value="Male">
                                         <span class="ml-2 text-gray-700">Male</span>
                                     </label>
-                                    <label class="inline-flex items-center ml-6">
+                                    <label class="inline-flex items-center">
                                         <input type="radio" class="form-radio" name="gender" value="Female">
                                         <span class="ml-2 text-gray-700">Female</span>
                                     </label>
